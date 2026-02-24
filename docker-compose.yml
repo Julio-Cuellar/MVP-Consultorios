@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16
+    container_name: jclinical-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jclinical
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - jclinical_pgdata:/var/lib/postgresql/data
+
+
+  mongo:
+    image: mongo:7.0
+    container_name: jclinical-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: jclinical_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - jclinical_mongodata:/data/db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jclinical-app
+    depends_on:
+      - db
+      - mongo
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/jclinical
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_DATA_MONGODB_URI: mongodb://jclinical:jclinical@mongo:27017/jclinical_mongo?authSource=admin
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+
+volumes:
+  jclinical_pgdata:
+  jclinical_mongodata:

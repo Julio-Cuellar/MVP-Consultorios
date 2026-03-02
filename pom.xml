@@ -20,10 +20,8 @@
 
   <properties>
     <java.version>21</java.version>
-    <sonar.organization>julio-cuellar</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.organization>julio-cuellar</sonar.organization> <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.projectKey>Julio-Cuellar_MVP-Consultorios</sonar.projectKey>
-    <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
   </properties>
 
   <modules>
